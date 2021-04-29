@@ -1,19 +1,22 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const questionSchema = new Schema({
-  texte: {
-    type: String,
-  },
-  choix: [
-    {
+const questionSchema = new Schema(
+  {
+    texte: {
       type: String,
     },
-  ],
-  reponse: {
-    type: Number,
+    choix: [
+      {
+        type: String,
+      },
+    ],
+    reponse: {
+      type: Number,
+    },
   },
-});
+  { timestamps: true }
+);
 
 const question = mongoose.model("Question", questionSchema);
 
