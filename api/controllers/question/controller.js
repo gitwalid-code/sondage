@@ -5,11 +5,16 @@ const getQuestions = async (req, res) => {
     const { texte, sort } = req.query;
     const filters = {};
     const options = {};
-    if (texte) filters.texte = { $regex: texte, $option: i };
+
+    if (texte) filters.texte = { $regex: texte, $options: "i" };
     if (sort) {
       options.sort = { createdAt: Number(sort) };
     }
-    const questions = await Question.find(filters, "-reponse", options);
+    const questions = await Question.find(
+      filters,
+      "-reponse -_id -__v",
+      options
+    );
     if (!questions) {
       return res.status(500).send({
         message: "Questions not found",
@@ -57,7 +62,38 @@ const addQuestion = async (req, res) => {
     });
   }
 };
-const updateQuestion = async (req, res) => {};
+const updateQuestion = async (req, res) => {
+  const { texte, choix, reponse } = req.body;
+  const { id } = req.params;
+  try {
+    const question = await Question.findById(id);
+    if (!question) {
+      return res.status(400).send({
+        message: "question not found",
+      });
+    }
+    const updatedQuestion = await Question.findByIdAndUpdate(
+      id,
+      {
+        texte,
+        choix,
+        reponse,
+      },
+      { new: true }
+    );
+    if (!updatedQuestion) {
+      return res.status(400).send({
+        message: "question not updated",
+      });
+    }
+    return res.status(200).send(updatedQuestion);
+  } catch (error) {
+    console.log("Error updateQuestion =>", error);
+    return res.status(500).send({
+      message: "Server Error",
+    });
+  }
+};
 const deleteQuestion = async (req, res) => {
   const { id } = req.params;
   try {
