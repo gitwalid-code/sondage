@@ -4,7 +4,7 @@ const getSondages = async (req, res) => {};
 const getOneSondage = async (req, res) => {
   try {
     const { id } = req.params;
-    const sondage = await (await Sondage.findById(id)).populate("questions");
+    const sondage = await Sondage.findById(id).populate("questions");
     if (!sondage) {
       return res.status(400).send({
         message: "Sondage doesn't exist",
@@ -13,7 +13,7 @@ const getOneSondage = async (req, res) => {
     return res.status(200).send(sondage);
   } catch (error) {
     console.log("Error in getOneSondage =>", error);
-    return res.status(00).send({
+    return res.status(500).send({
       message: "Server Error",
     });
   }
