@@ -1,6 +1,16 @@
 const Sondage = require("../../../models/sondage");
 
-const getSondages = async (req, res) => {};
+const getSondages = async (req, res) => {
+  try {
+    const { sujet, sort } = req.query;
+    const filters = {};
+    const options = {};
+    if (sujet) filters.text = { $regex: sujet, $options: "i" };
+    if (sort) {
+      options.sort = { createdAt };
+    }
+  } catch (error) {}
+};
 const getOneSondage = async (req, res) => {
   try {
     const { id } = req.params;
