@@ -6,6 +6,8 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 const questionRouter = require("./api/controllers/question/router");
+const sondageRouter = require("./api/controllers/sondage/router");
+const userRouter = require("./api/controllers/user/router");
 
 const app = express();
 const PORT = process.env.PORT || 2000;
@@ -26,5 +28,7 @@ app.use(cors());
 app.use(helmet());
 
 app.use("/question", questionRouter);
+app.use("/sondage", sondageRouter);
+app.use("/user", userRouter);
 
 app.listen(PORT, () => console.log("Listening on http://localhost" + PORT));
