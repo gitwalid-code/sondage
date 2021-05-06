@@ -50,7 +50,32 @@ const logIn = async (req, res) => {
   }
 };
 
+const getInfo = async (req, res) => {
+  try {
+    const { data } = req;
+    const user = await User.findOne({ email: data.email });
+    if (!user) {
+      return res.status(400).send({
+        message: "user not found",
+      });
+    }
+    console.log("user = ", user);
+
+    res.send({
+      nom: user.nom,
+      prenom: user.prenom,
+    });
+  } catch (error) {
+    console.log("Error in getInfo", error);
+
+    res.status(500).send({
+      message: "Server error",
+    });
+  }
+};
+
 module.exports = {
   signUp,
   logIn,
+  getInfo,
 };
